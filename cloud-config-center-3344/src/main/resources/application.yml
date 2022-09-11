@@ -1,0 +1,43 @@
+server:
+  port: 3344
+
+spring:
+  application:
+    name:  cloud-config-center #注册进Eureka服务器的微服务名
+  cloud:
+    config:
+      server:
+        git:
+#          uri: git@github.com:linzj0911/springcloud-config.git #GitHub上面的git仓库名字
+#          uri: git@gitee.com:linzhijie0808/springcloud-config.git #Gitee上面git仓库名字
+          # 使用ssh有各种错误，最终选择https,原来仓库设置了私有，所以无法访问，mmd
+          uri: https://gitee.com/linzhijie0808/springcloud-config.git
+          # 报错TransportException: git@github.com:linzj0911/springcloud-config.git: Auth fail
+          # 需要在配置项输入github账号密码,或者使用https
+#          username: xxxx
+#          password: xxxx
+          ####搜索目录
+          search-paths:
+            - springcloud-config
+      ####读取分支
+      label: master
+  #rabbitmq相关配置
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+#服务注册到eureka地址
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+
+##rabbitmq相关配置,暴露bus刷新配置的端点
+management:
+  endpoints: #暴露bus刷新配置的端点
+    web:
+      exposure:
+        include: 'bus-refresh'
+
